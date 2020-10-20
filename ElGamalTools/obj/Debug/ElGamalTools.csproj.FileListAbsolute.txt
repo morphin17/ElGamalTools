@@ -1,0 +1,17 @@
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\bin\Debug\ElGamalTools.exe.config
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\bin\Debug\ElGamalTools.exe
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\bin\Debug\ElGamalTools.pdb
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools.csprojResolveAssemblyReference.cache
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\MainWindow.g.cs
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\App.g.cs
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools_MarkupCompile.cache
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools_MarkupCompile.lref
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\MainWindow.baml
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools.g.resources
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools.Properties.Resources.resources
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools.csproj.GenerateResource.cache
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools.csproj.CoreCompileInputs.cache
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools.exe
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\ElGamalTools.pdb
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\About.g.cs
+C:\Users\Dinaf\source\repos\ElGamalTools\ElGamalTools\obj\Debug\About.baml
