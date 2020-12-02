@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElGamalTools", "ElGamalTools\ElGamalTools.csproj", "{6179B33A-0019-4200-B7FA-FCAF1F5DBB26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{A8972E2F-4446-4CAD-9AFB-55BBC12C10E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestCore", "ConsoleTestCore\ConsoleTestCore.csproj", "{56CFB4B4-4B55-4FC7-BF3C-9841BC78C67C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{6179B33A-0019-4200-B7FA-FCAF1F5DBB26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6179B33A-0019-4200-B7FA-FCAF1F5DBB26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6179B33A-0019-4200-B7FA-FCAF1F5DBB26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8972E2F-4446-4CAD-9AFB-55BBC12C10E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8972E2F-4446-4CAD-9AFB-55BBC12C10E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8972E2F-4446-4CAD-9AFB-55BBC12C10E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8972E2F-4446-4CAD-9AFB-55BBC12C10E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56CFB4B4-4B55-4FC7-BF3C-9841BC78C67C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56CFB4B4-4B55-4FC7-BF3C-9841BC78C67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56CFB4B4-4B55-4FC7-BF3C-9841BC78C67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56CFB4B4-4B55-4FC7-BF3C-9841BC78C67C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
