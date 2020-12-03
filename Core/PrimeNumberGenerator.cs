@@ -12,34 +12,30 @@ namespace Core
 
         public static BigInteger GeneratePrime(int length = 4)
         {
-            BigInteger p = new BigInteger(4);
-            while (!IsPrime(p, 128)) {
-                p = GeneratePrimeCandidate(length);
-            }
+            while (true)
+            {
+                BigInteger p = new BigInteger(4);
+                while (!IsPrime(p, 128))
+                {
+                    p = GeneratePrimeCandidate(length);
+                }
 
-            return p;
+                p = 2 * p + 1;
+                if (IsPrime(p, 128))
+                {
+                    return p;
+                }
+            }
         }
 
         public static BigInteger FindPrimitiveRoot(BigInteger p)
         {
-            if (p == 2)
-            {
-                return 1;
-            }
-
-            BigInteger p1 = 2;
-            BigInteger p2 = (p - 1) / p1;
-
             while (true)
             {
-                BigInteger g = nextRandom(2, p - 1);
-
-                if (!(BigInteger.ModPow(g, (p - 1) / p1, p) == 1))
+                BigInteger alpha = nextRandom(2, p - 1);
+                if ((p-1) % alpha != 1)
                 {
-                    if (!(BigInteger.ModPow(g, (p - 1) / p2, p) == 1))
-                    {
-                        return g;
-                    }
+                    return alpha;
                 }
             }
         }

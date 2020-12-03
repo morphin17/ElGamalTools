@@ -8,3 +8,13 @@ C:\Users\Kidy\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.c
 C:\Users\Kidy\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.csproj.CopyComplete
 C:\Users\Kidy\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.exe
 C:\Users\Kidy\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.pdb
+D:\Projects\elgamal-tools\ConsoleTestCore\bin\Debug\ConsoleTestCore.exe.config
+D:\Projects\elgamal-tools\ConsoleTestCore\bin\Debug\ConsoleTestCore.exe
+D:\Projects\elgamal-tools\ConsoleTestCore\bin\Debug\ConsoleTestCore.pdb
+D:\Projects\elgamal-tools\ConsoleTestCore\bin\Debug\Core.dll
+D:\Projects\elgamal-tools\ConsoleTestCore\bin\Debug\Core.pdb
+D:\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.csprojResolveAssemblyReference.cache
+D:\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.csproj.CoreCompileInputs.cache
+D:\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.csproj.CopyComplete
+D:\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.exe
+D:\Projects\elgamal-tools\ConsoleTestCore\obj\Debug\ConsoleTestCore.pdb

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core;
 using System.IO;
 using System.Numerics;
+using System.Security.Cryptography;
 
 namespace ConsoleTestCore
 {
@@ -23,19 +24,29 @@ namespace ConsoleTestCore
             return buff;
         }
 
+
+
+
         static void Main(string[] args)
         {
-            //byte[] M = FileToByteArray("./photo_2020-12-02_15-48-28.jpg");
+            byte[] fileBytes = FileToByteArray("./photo_2020-12-02_15-48-28.jpg");
+            var md5 = MD5.Create();
+            var hash = md5.ComputeHash(fileBytes);
+            BigInteger M = new BigInteger(BitConverter.ToUInt64(hash, 0));
+
+            Console.WriteLine(M);
+            Console.Read();
             //byte[] M = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
             //int[] encodedM = Utils.encode(M, 2);
-            BigInteger p = PrimeNumberGenerator.GeneratePrime(2);
-            BigInteger g = PrimeNumberGenerator.FindPrimitiveRoot(p);
-            Console.WriteLine(p);
-            Console.WriteLine(BitConverter.ToString(p.ToByteArray()));
-            Console.WriteLine(g);
-            Console.WriteLine(BitConverter.ToString(g.ToByteArray()));
-            Console.WriteLine("Good");
-            Console.Read();
+
+            //BigInteger p = PrimeNumberGenerator.GeneratePrime(16);
+            //Console.WriteLine(p);
+            //Console.WriteLine(BitConverter.ToString(p.ToByteArray()));
+            //BigInteger g = PrimeNumberGenerator.FindPrimitiveRoot(p);
+            //Console.WriteLine(g);
+            //Console.WriteLine(BitConverter.ToString(g.ToByteArray()));
+            //Console.WriteLine("Good");
+            //Console.Read();
         }
     }
 }
