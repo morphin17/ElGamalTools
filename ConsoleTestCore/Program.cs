@@ -58,24 +58,32 @@ namespace ConsoleTestCore
 
             Signature sign = elGamal.Generate(dataBytes);
 
-            PairPG pairPG2 = new PairPG();
-            ElGamal elGamal2 = new ElGamal(pairPG2);
-            string data2 = "Сообщение, что же я тут написал ну хз хз?";
-            byte[] dataBytes2 = Encoding.ASCII.GetBytes(data2);
+            byte[] encrypted = Encrypter.EncryptBytes(Ser.GetBytes(elGamal.privateK), Core.utils.Encoder.Encode("password"), Core.utils.Encoder.Encode("elgamal-tools"));
+            byte[] decrypted = Encrypter.DecryptBytes(encrypted, Core.utils.Encoder.Encode("password"), Core.utils.Encoder.Encode("elgtool"));
 
-            Signature sign2 = elGamal2.Generate(dataBytes2);
 
-            ElGamal elGamal3 = new ElGamal(publicKey: elGamal.publicK);
-            Signature sign3 = elGamal3.Generate(dataBytes2);
+            PrivateKey privateKey = Des.toPrivateKey(decrypted);
 
-            if (elGamal3.Verify(dataBytes, sign))
-            {
-                Console.WriteLine("Подпись действительна");
-            }
-            else
-            {
-                Console.WriteLine("Подпись не действительна");
-            }
+            Console.WriteLine( decrypted.SequenceEqual(Ser.GetBytes(elGamal.privateK)));
+
+            //PairPG pairPG2 = new PairPG();
+            //ElGamal elGamal2 = new ElGamal(pairPG2);
+            //string data2 = "Сообщение, что же я тут написал ну хз хз?";
+            //byte[] dataBytes2 = Encoding.ASCII.GetBytes(data2);
+
+            //Signature sign2 = elGamal2.Generate(dataBytes2);
+
+            //ElGamal elGamal3 = new ElGamal(publicKey: elGamal.publicK);
+            //Signature sign3 = elGamal3.Generate(dataBytes2);
+
+            //if (elGamal3.Verify(dataBytes, sign))
+            //{
+            //    Console.WriteLine("Подпись действительна");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Подпись не действительна");
+            //}
 
 
 

@@ -54,6 +54,7 @@
     <Compile Include="utils\BigIntegerUtils.cs" />
     <Compile Include="utils\ElGamal.cs" />
     <Compile Include="utils\Encoder.cs" />
+    <Compile Include="utils\Encrypter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

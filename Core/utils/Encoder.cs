@@ -16,5 +16,14 @@ namespace Core.utils
             var hash = md5.ComputeHash(fileBytes);
             return new BigInteger(BitConverter.ToUInt64(hash, 0));
         }
+
+        static public byte[] Encode(string s)
+        {
+            byte[] fileBytes = Encoding.ASCII.GetBytes(s);
+            var md5 = MD5.Create();
+            var hash = md5.ComputeHash(fileBytes);
+
+            return hash;
+        }
     }
 }
