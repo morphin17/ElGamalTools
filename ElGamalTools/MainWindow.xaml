@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:ElGamalTools"
         mc:Ignorable="d"
-        Title="ElGamal Tools" Height="450" Width="800" MinHeight="450" MinWidth="800">
+        Title="ElGamal Tools" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
     <Grid>
         <DockPanel VerticalAlignment="Stretch" LastChildFill="True" >
             <Menu Height="20" VerticalAlignment="Top" DockPanel.Dock="Top">
@@ -13,7 +14,7 @@
                     <MenuItem Header="Выход" ></MenuItem>
                 </MenuItem>
                 
-                <MenuItem Header="Инструменты">
+                <!--<MenuItem Header="Инструменты">
                     <MenuItem Header="Ключи">
                         <MenuItem Header="Загрузить ключи" ></MenuItem>
                         <MenuItem Header="Выгрузить ключи" ></MenuItem>
@@ -23,17 +24,22 @@
                         <MenuItem Header="Создать подпись" ></MenuItem>
                         <MenuItem Header="Проверить подпись" ></MenuItem>
                     </MenuItem>
-                </MenuItem>
+                </MenuItem>-->
                 <MenuItem Header="Справка" >
                     <MenuItem Header="О программе" Click="MenuItem_Click"></MenuItem>
                 </MenuItem>
             </Menu>
             <Border Padding="10" >
                 <TabControl>
-                    <TabItem Header="Ключи">
+                    <TabItem Header="Настройка">
                         <Border Padding="10" >
-                            <StackPanel>
-                                <GroupBox Header="Настройки">
+                            <DockPanel LastChildFill="False">
+                                <DockPanel DockPanel.Dock="Top" LastChildFill="False" HorizontalAlignment="Right">
+                                    <Button Name="GeneratePairPG" Click="GeneratePairPG_Click" Width="150" ToolTip="Пересчитать P и G. Это может занять некоторое время.">
+                                        Пересчитать пару
+                                    </Button>
+                                </DockPanel>
+                                <GroupBox DockPanel.Dock="Top" Header="Пара (P,G)">
                                     <DockPanel VerticalAlignment="Stretch" >
                                         <Border Padding="5" DockPanel.Dock="Top" >
                                             <DockPanel >
@@ -41,118 +47,135 @@
                                                     P (Prime):
                                                 </TextBlock>
 
-                                                <Border Width="40" Margin="5,0,5,0" BorderThickness="1" BorderBrush="Gray">
-                                                    <TextBlock TextAlignment="Center">
-                                                        255
-                                                    </TextBlock>
-                                                </Border>
-                                                
+
                                                 <TextBox 
-                                                   IsEnabled="False"
+                                                   IsReadOnly="True"
                                                    Name="pValue"
-                                                   Text="174876E813A5855584F4585455F854855A55965566691E66"
+                                                   Text=""
                                                 />
                                             </DockPanel>
-                                            
+
                                         </Border>
                                         <Border Padding="5" DockPanel.Dock="Top">
                                             <DockPanel >
                                                 <TextBlock Width="100" >
                                                     G (Base):
                                                 </TextBlock>
-                                                
-                                                <Border Width="40" Margin="5,0,5,0" BorderThickness="1" BorderBrush="Gray">
-                                                    <TextBlock TextAlignment="Center">
-                                                        255
-                                                    </TextBlock>
-                                                </Border>
-                                                
+
+
                                                 <TextBox 
-                                                   IsEnabled="False"
+                                                    IsReadOnly="True"
                                                    Name="gValue"
-                                                   Text="174876E813A5855584F4585455F854855A55965566691E66"
-                                                />
-                                            </DockPanel>
-                                        </Border>
-                                        
-
-
-                                    </DockPanel>
-                                    
-                                </GroupBox>
-                                <GroupBox Header="Секретный ключ">
-                                    <DockPanel>
-                                        
-                                        <Border Padding="5" DockPanel.Dock="Top">
-                                            <DockPanel >
-                                                <TextBlock Width="100">
-                                                    X (private key):
-                                                </TextBlock>
-
-                                                <Border Width="40" Margin="5,0,5,0" BorderThickness="1" BorderBrush="Gray">
-                                                    <TextBlock TextAlignment="Center">
-                                                        255
-                                                    </TextBlock>
-                                                </Border>
-
-                                                <TextBox 
-                                                   Name="privateKeyValue"
-                                                   Text="174876E813A5855584F4585455F854855A55965566691E66"
+                                                   Text=""
                                                 />
                                             </DockPanel>
                                         </Border>
 
-                                        
+
 
                                     </DockPanel>
+
                                 </GroupBox>
-                                <GroupBox Header="Открытый ключ">
-                                    <DockPanel>
-                                        <Border Padding="5" DockPanel.Dock="Top">
-                                            <DockPanel >
-                                                <TextBlock Width="100">
-                                                    Y (public key):
-                                                </TextBlock>
+                                <DockPanel  DockPanel.Dock="Bottom">
+                                    <ProgressBar Visibility="Hidden" Name="GenerateLoading" IsIndeterminate="False" Value="0">
 
-                                                <Border Width="40" Margin="5,0,5,0" BorderThickness="1" BorderBrush="Gray">
-                                                    <TextBlock TextAlignment="Center">
-                                                        255
-                                                    </TextBlock>
-                                                </Border>
+                                    </ProgressBar>
+                                </DockPanel>
+                                <DockPanel Visibility="Hidden" Name="GenerateLog" DockPanel.Dock="Bottom" Margin="0,10,0,10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
 
-                                                <TextBox 
-                                                   Name="publicKeyValue"
-                                                   Text="174876E813A5855584F4585455F854855A55965566691E66"
-                                                />
-
-                                            </DockPanel>
-                                        </Border>
-
-                                        
-                                    </DockPanel>
-                                </GroupBox>
-                                <GroupBox Header="Работа с ключами">
-                                    <Border Padding="5" DockPanel.Dock="Top">
-                                        <DockPanel HorizontalAlignment="Right" >
-                                            <Button Width="100" Margin="0,0,5,0" >
-                                                Сгенерировать
-                                            </Button>
-                                            <Button Width="100" Margin="0,0,5,0">
-                                                Сохранить
-                                            </Button>
-                                            <Button Width="100">
-                                                Открыть
-                                            </Button>
+                                        <DockPanel Grid.Column="0">
+                                            <TextBlock Margin="0,0,10,0" FontWeight="Bold" Visibility="Visible" >
+                                                Поиск P:
+                                            </TextBlock>
+                                            <TextBlock Name="pCandidate">
+                                                174876E813A5855584F4585455F854855A55965566691E66
+                                            </TextBlock>
                                         </DockPanel>
-                                    </Border>
-                                </GroupBox>
-                            </StackPanel>
-                            
 
-                            
+                                        <DockPanel Grid.Column="1">
+                                            <TextBlock Margin="0,0,10,0" FontWeight="Bold" Visibility="Visible" >
+                                                Поиск G:
+                                            </TextBlock>
+                                            <TextBlock Name="gCandidate">
+                                                174876E813A5855584F4585455F854855A55965566691E66
+                                            </TextBlock>
+                                        </DockPanel>
+                                    </Grid>
+                                </DockPanel>
+                            </DockPanel>
                         </Border>
                     </TabItem>
-                    <TabItem Header="Подпись">
+                    <TabItem Header="Ключи">
+                        <Border Padding="10" >
+                            <DockPanel LastChildFill="False">
+                                <DockPanel DockPanel.Dock="Top" LastChildFill="False" HorizontalAlignment="Right">
+                                    <TextBlock Margin="0,0,10,0">
+                                        Размер ключей:
+                                    </TextBlock>
+                                    <xctk:IntegerUpDown Name="keySize" ValueChanged="keySize_ValueChanged" Width="80" Margin="0,0,10,0" Value="64" AllowTextInput="False"  Increment="8" DefaultValue="64" Minimum="64" Maximum="256" />
+                                    <Button Margin="0,0,10,0" Name="GenerateKeys" Click="GeneratePairPG_Click" Width="150" ToolTip="Создать случайный приватный и публичный ключи.">
+                                        Сгенерировать
+                                    </Button>
+                                    
+                                </DockPanel>
+                                <GroupBox DockPanel.Dock="Top" Header="Ключи">
+                                    <DockPanel VerticalAlignment="Stretch" >
+                                        <Border Padding="5" DockPanel.Dock="Top" >
+                                            <DockPanel >
+                                                <TextBlock Width="100">
+                                                    Private Key:
+                                                </TextBlock>
+
+                                                <Button DockPanel.Dock="Right"  Width="80" Margin="10,0,0,0">
+                                                    Сохранить
+                                                </Button>
+                                                <Button DockPanel.Dock="Right" Width="50" Margin="10,0,0,0">
+                                                    ...
+                                                </Button>
+
+                                                <TextBox 
+                                                   IsReadOnly="True"
+                                                   Name="privateKeyValue"
+                                                   Text=""
+                                                />
+                                            </DockPanel>
+
+                                        </Border>
+                                        <Border Padding="5" DockPanel.Dock="Top">
+                                            <DockPanel >
+                                                <TextBlock Width="100" >
+                                                    Public Key:
+                                                </TextBlock>
+                                                
+                                                <Button DockPanel.Dock="Right"  Width="80" Margin="10,0,0,0">
+                                                    Сохранить
+                                                </Button>
+                                                <Button DockPanel.Dock="Right" Width="50" Margin="10,0,0,0">
+                                                    ...
+                                                </Button>
+
+                                                <TextBox 
+                                                   IsReadOnly="True"
+                                                   Name="publicKeyValue"
+                                                   Text=""
+                                                />
+                                            </DockPanel>
+                                        </Border>
+
+
+
+                                    </DockPanel>
+
+                                </GroupBox>
+                            </DockPanel>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="Создать подпись">
                         <Border Padding="10" >
                             <DockPanel LastChildFill="False">
                                 <GroupBox Header="Файл" DockPanel.Dock="Top">
@@ -165,13 +188,14 @@
                                                             Файл:
                                                         </TextBlock>
 
-                                                        <Button DockPanel.Dock="Right" Margin="5,0,0,0" Width="20">
+                                                        <Button Name="OpenFileBrowser" DockPanel.Dock="Right" Margin="5,0,0,0" Width="20">
                                                             ...
                                                         </Button>
         
                                                         <TextBox 
+                                                           IsReadOnly="True"
                                                            Name="filePath"
-                                                           Text="C:\Users\Dinaf\Google Диск\Учеба\Сем 7\Теор. вер и Мат. стат\Лабы\Лабораторная работа 3\Отчет.pdf"
+                                                           Text=""
                                                         />
 
                                                     </DockPanel>
@@ -179,61 +203,48 @@
                                                 
                                             </DockPanel>
                                         </Border>
-                                        
+                                        <Border Padding="5" DockPanel.Dock="Top">
+                                            <DockPanel HorizontalAlignment="Right" >
+                                                <Button Name="CreateSign" Width="200" Margin="0,0,5,0" >
+                                                    Создать цифровую подпись
+                                                </Button>
+                                            </DockPanel>
+                                        </Border>
                                     </DockPanel>
                                 </GroupBox>
-                                <GroupBox Header="Подписать" DockPanel.Dock="Top">
+                                <GroupBox Header="Подпись" DockPanel.Dock="Top">
                                     <DockPanel VerticalAlignment="Stretch" >
                                         <Border Padding="5" DockPanel.Dock="Top" >
                                             <DockPanel >
-                                                    <Border Padding="5" DockPanel.Dock="Top">
-                                                        <DockPanel >
-                                                            <TextBlock Width="100">
-                                                                K:
-                                                            </TextBlock>
+                                                <Border Padding="5" DockPanel.Dock="Top">
+                                                    <DockPanel >
+                                                        <TextBlock Width="100">
+                                                                R:
+                                                        </TextBlock>
 
-                                                            <TextBox 
-                                                                IsEnabled="False"
+                                                        <TextBox 
+                                                               IsReadOnly="True"
                                                                Name="kValue"
-                                                               Text="174876E813A5855584F4585455F854855A55965566691E66"
+                                                               Text=""
                                                             />
-                                                        </DockPanel>
-                                                    </Border>
+                                                    </DockPanel>
+                                                </Border>
                                                 <Border Padding="5" DockPanel.Dock="Top">
                                                     <DockPanel >
                                                         <TextBlock Width="100">
-                                                                A:
+                                                                S:
                                                         </TextBlock>
 
 
                                                         <TextBox 
-                                                                IsEnabled="False"
+                                                                IsReadOnly="True"
                                                                Name="aValue"
-                                                               Text="174876E813A5855584F4585455F854855A55965566691E66"
-                                                            />
+                                                               Text=""                                                             />
                                                     </DockPanel>
                                                 </Border>
-                                                <Border Padding="5" DockPanel.Dock="Top">
-                                                    <DockPanel >
-                                                        <TextBlock Width="100">
-                                                                B:
-                                                        </TextBlock>
-
-
-                                                        <TextBox 
-                                                                IsEnabled="False"
-                                                               Name="bValue"
-                                                               Text="174876E813A5855584F4585455F854855A55965566691E66"
-                                                            />
-                                                    </DockPanel>
-                                                </Border>
-                                                
                                                 <Border Padding="5" DockPanel.Dock="Top">
                                                     <DockPanel HorizontalAlignment="Right" >
-                                                        <Button Width="200" Margin="0,0,5,0" >
-                                                            Создать цифровую подпись
-                                                        </Button>
-                                                        <Button Width="100" Margin="0,0,0,0" >
+                                                        <Button Name="SaveSign" Width="100" Margin="0,0,0,0" >
                                                             Сохранить
                                                         </Button>
                                                     </DockPanel>
@@ -242,42 +253,81 @@
                                         </Border>
                                     </DockPanel>
                                 </GroupBox>
-                                <GroupBox Header="Цифровая подпись" DockPanel.Dock="Top">
+
+                            </DockPanel>
+
+
+
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="Проверить подпись">
+                        <Border Padding="10" >
+                            <DockPanel LastChildFill="False">
+                                <GroupBox Header="Файл" DockPanel.Dock="Top">
                                     <DockPanel VerticalAlignment="Stretch" >
                                         <Border Padding="5" DockPanel.Dock="Top" >
                                             <DockPanel >
                                                 <Border Padding="5" DockPanel.Dock="Top">
                                                     <DockPanel >
                                                         <TextBlock Width="100">
-                                                            Подпись:
+                                                            Файл:
                                                         </TextBlock>
 
-                                                        <Button DockPanel.Dock="Right" Margin="5,0,0,0" Width="20">
+                                                        <Button Name="OpenFileBrowserCheckSign" DockPanel.Dock="Right" Margin="5,0,0,0" Width="20">
                                                             ...
                                                         </Button>
 
                                                         <TextBox 
-                                                           Name="sigPath"
-                                                           Text="C:\Users\Dinaf\Google Диск\Учеба\Сем 7\Теор. вер и Мат. стат\Лабы\Лабораторная работа 3\elGamal.sig"
+                                                           IsReadOnly="True"
+                                                           Name="filePathCheckSign"
+                                                           Text=""
                                                         />
 
                                                     </DockPanel>
                                                 </Border>
+
+                                            </DockPanel>
+                                        </Border>
+                                        <Border Padding="5" DockPanel.Dock="Top">
+                                            
+                                        </Border>
+                                    </DockPanel>
+                                </GroupBox>
+                                <GroupBox Header="Подпись" DockPanel.Dock="Top">
+                                    <DockPanel VerticalAlignment="Stretch" >
+                                        <Border Padding="5" DockPanel.Dock="Top" >
+                                            <DockPanel >
                                                 <Border Padding="5" DockPanel.Dock="Top">
-                                                    <DockPanel HorizontalAlignment="Right" >
-                                                        <Button Width="100" Margin="0,0,0,0" >
-                                                            Проверить
+                                                    <DockPanel >
+                                                        <TextBlock Width="100">
+                                                            Файл:
+                                                        </TextBlock>
+
+                                                        <Button Name="OpenSignFileBrowserCheckSign" DockPanel.Dock="Right" Margin="5,0,0,0" Width="20">
+                                                            ...
                                                         </Button>
+
+                                                        <TextBox 
+                                                           IsReadOnly="True"
+                                                           Name="fileSignPathCheckSign"
+                                                           Text=""
+                                                        />
+
                                                     </DockPanel>
                                                 </Border>
+
                                             </DockPanel>
                                         </Border>
                                     </DockPanel>
                                 </GroupBox>
-
-                                <ProgressBar DockPanel.Dock="Bottom"  Minimum="0" Maximum="100" Value="80" Height="25"/>
-                                
+                                <DockPanel Margin="0,10,0,0" LastChildFill="False" DockPanel.Dock="Top" HorizontalAlignment="Right" >
+                                    <Button DockPanel.Dock="Right" Name="CheckSign" Width="200" Margin="0,0,5,0" >
+                                        Проверить цифровую подпись
+                                    </Button>
+                                </DockPanel>
                             </DockPanel>
+                            
+                            
 
 
 

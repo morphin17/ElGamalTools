@@ -33,5 +33,16 @@ namespace ElGamalTools
             a = new About();
             a.ShowDialog();
         }
+
+        private void keySize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+
+        }
+
+        private void GeneratePairPG_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }
