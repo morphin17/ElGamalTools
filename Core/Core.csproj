@@ -43,11 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PrimeNumberGenerator.cs" />
-    <Compile Include="PrivateKey.cs" />
+    <Compile Include="data\Signature.cs" />
+    <Compile Include="utils\BigIntegerRandom.cs" />
+    <Compile Include="data\Des.cs" />
+    <Compile Include="data\PairPG.cs" />
+    <Compile Include="data\PrivateKey.cs" />
+    <Compile Include="data\Ser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PublicKey.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="data\PublicKey.cs" />
+    <Compile Include="utils\BigIntegerUtils.cs" />
+    <Compile Include="utils\ElGamal.cs" />
+    <Compile Include="utils\Encoder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
