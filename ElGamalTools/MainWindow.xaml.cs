@@ -34,7 +34,13 @@ namespace ElGamalTools
         PairPG pairPG;
         ElGamal elGamal;
         BackgroundWorker backgroundWorker = new BackgroundWorker();
-
+        BigInteger MCreateSign;
+        BigInteger MCheckSign;
+        Signature signCreated;
+        Signature signOpened;
+        bool signCreatedFlag = false;
+        bool privateKeySave = false;
+        bool publicKeySave = false;
 
         public MainWindow()
         {
@@ -147,8 +153,14 @@ namespace ElGamalTools
 
         private void SetKeys()
         {
-            privateKeyValue.Text = Utils.BigIntegerToHexString(elGamal.privateK.x);
-            publicKeyValue.Text = Utils.BigIntegerToHexString(elGamal.publicK.h);
+            if (elGamal.privateK != null)
+            {
+                privateKeyValue.Text = Utils.BigIntegerToHexString(elGamal.privateK.x);
+            }
+            if (elGamal.publicK != null)
+            {
+                publicKeyValue.Text = Utils.BigIntegerToHexString(elGamal.publicK.h);
+            }
         }
 
         private PairPG GetPairPG(int length)
@@ -156,21 +168,31 @@ namespace ElGamalTools
             return pairPGs[length / 8 - 8];
         }
 
-        private void GenerateKeys_Click(object sender, RoutedEventArgs e)
+        private bool saveKeysDialog()
         {
-            elGamal = new ElGamal(pairPG);
-            SetKeys();
+            if (signCreatedFlag )
+            {
+                MessageBoxResult dialogResult = MessageBox.Show("С помощью текущих ключей была создана подпись. Стоит сохранять ключи. Все ровно выполнить действие?", "Ключи", MessageBoxButton.YesNo);
+                if (dialogResult == MessageBoxResult.No)
+                {
+                    return true;
+                }
+                
+            }
+
+            signCreatedFlag = false;
+            signCreated = null;
+            rValue.Text = "";
+            sValue.Text = "";
+            return false;
         }
 
-        private string showFileBrowser()
+        private void GenerateKeys_Click(object sender, RoutedEventArgs e)
         {
-            // Create OpenFileDialog 
-            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-                return dialog.SelectedPath;
-            }
-           
+            if (saveKeysDialog()) return;
+
+            elGamal = new ElGamal(pairPG);
+            SetKeys();
         }
 
         private void SavePrivateKey_Click(object sender, RoutedEventArgs e)
@@ -183,18 +205,32 @@ namespace ElGamalTools
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Private key (*.pk)|*.pk";
-            if (saveFileDialog.ShowDialog() == true)
+            if (saveFileDialog.ShowDialog() == true && saveFileDialog.FileName.Length != 0)
+            {
                 File.WriteAllBytes(saveFileDialog.FileName, Ser.GetBytes(elGamal.privateK));
+                privateKeySave = true;
+            }
+                
         }
 
         private void OpenPrivateKey_Click(object sender, RoutedEventArgs e)
         {
+            if (saveKeysDialog()) return;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Private key (*.pk)|*.pk";
-            if (openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() == true && openFileDialog.FileName.Length != 0)
             {
-                elGamal = new ElGamal(privateKey: Des.toPrivateKey(File.ReadAllBytes(openFileDialog.FileName)), publicKey: elGamal.publicK);
+                if (elGamal == null)
+                {
+                    elGamal = new ElGamal(privateKey: Des.toPrivateKey(File.ReadAllBytes(openFileDialog.FileName)));
+                }
+                else
+                {
+                    elGamal = new ElGamal(privateKey: Des.toPrivateKey(File.ReadAllBytes(openFileDialog.FileName)), publicKey: elGamal.publicK);
+                }
+                
                 SetKeys();
+                privateKeySave = true;
             }
                 
         }
@@ -209,20 +245,140 @@ namespace ElGamalTools
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Public key (*.pubk)|*.pubk";
-            if (saveFileDialog.ShowDialog() == true)
+            if (saveFileDialog.ShowDialog() == true && saveFileDialog.FileName.Length != 0)
+            {
                 File.WriteAllBytes(saveFileDialog.FileName, Ser.GetBytes(elGamal.publicK));
+                publicKeySave = true;
+            }
+                
         }
 
         private void OpenPublicKey_Click(object sender, RoutedEventArgs e)
         {
+            if (saveKeysDialog()) return;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Public key (*.pubk)|*.pubk";
-            if (openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() == true && openFileDialog.FileName.Length != 0)
             {
-                elGamal = new ElGamal(publicKey: Des.toPublicKey(File.ReadAllBytes(openFileDialog.FileName)), privateKey: elGamal.privateK);
+                if (elGamal == null)
+                {
+                    elGamal = new ElGamal(publicKey: Des.toPublicKey(File.ReadAllBytes(openFileDialog.FileName)));
+                }
+                else
+                {
+                    elGamal = new ElGamal(publicKey: Des.toPublicKey(File.ReadAllBytes(openFileDialog.FileName)), privateKey: elGamal.privateK);
+                }
+                
                 SetKeys();
+                publicKeySave = true;
             }
                 
+        }
+
+        private void OpenFileBrowser_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true && openFileDialog.FileName.Length != 0)
+            {
+                MCreateSign = Core.utils.Encoder.EncodeByteArray(File.ReadAllBytes(openFileDialog.FileName));
+                filePath.Text = openFileDialog.FileName;
+            }
+        }
+
+        private void CreateSign_Click(object sender, RoutedEventArgs e)
+        {
+            if (elGamal == null || elGamal.privateK == null || elGamal.publicK == null)
+            {
+                MessageBox.Show("Сгенерируйте или откройте публичный и приватный ключ.");
+                return;
+            }
+
+            if (MCreateSign == 0)
+            {
+                MessageBox.Show("Файл не открыт.");
+                return;
+            }
+
+            signCreated = elGamal.Generate(MCreateSign);
+            rValue.Text = Utils.BigIntegerToHexString(signCreated.r);
+            sValue.Text = Utils.BigIntegerToHexString(signCreated.s);
+           
+        }
+
+
+        private void SaveSign_Click(object sender, RoutedEventArgs e)
+        {
+            if (elGamal == null || elGamal.publicK == null)
+            {
+                MessageBox.Show("Публичный ключ не задан.");
+                return;
+            }
+
+            if (signCreated == null)
+            {
+                MessageBox.Show("Электронная подпись не вычислена.");
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Signature (*.sign)|*.sign";
+            if (saveFileDialog.ShowDialog() == true && saveFileDialog.FileName.Length != 0)
+            {
+                File.WriteAllBytes(saveFileDialog.FileName, Ser.GetBytes(signCreated));
+                signCreatedFlag = true;
+            }
+                
+        }
+
+        private void OpenFileBrowserCheckSign_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true && openFileDialog.FileName.Length != 0)
+            {
+                MCheckSign = Core.utils.Encoder.EncodeByteArray(File.ReadAllBytes(openFileDialog.FileName));
+                filePathCheckSign.Text = openFileDialog.FileName;
+            }
+        }
+
+        private void OpenSignFileBrowserCheckSign_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Signature (*.sign)|*.sign";
+            if (openFileDialog.ShowDialog() == true && openFileDialog.FileName.Length != 0)
+            {
+                signOpened = Des.toSignature(File.ReadAllBytes(openFileDialog.FileName));
+                fileSignPathCheckSign.Text = openFileDialog.FileName;
+            }
+        }
+
+        private void CheckSign_Click(object sender, RoutedEventArgs e)
+        {
+            if (elGamal == null || elGamal.publicK == null)
+            {
+                MessageBox.Show("Публичный ключ не задан.");
+                return;
+            }
+
+            if (signOpened == null)
+            {
+                MessageBox.Show("Электронная подпись не открыта.");
+                return;
+            }
+
+            if (MCheckSign == 0)
+            {
+                MessageBox.Show("Файл не открыт.");
+                return;
+            }
+
+            if (elGamal.Verify(MCheckSign, signOpened))
+            {
+                MessageBox.Show("Подпись действительна");
+            }
+            else
+            {
+                MessageBox.Show("Подпись не действительна");
+            }
         }
     }
 }
