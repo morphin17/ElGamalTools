@@ -42,6 +42,9 @@ namespace ElGamalTools
         bool privateKeySave = false;
         bool publicKeySave = false;
 
+        PasswordCreate pC;
+        Password p;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -205,10 +208,16 @@ namespace ElGamalTools
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Private key (*.pk)|*.pk";
-            if (saveFileDialog.ShowDialog() == true && saveFileDialog.FileName.Length != 0)
+            pC = new PasswordCreate();
+            if (pC.ShowDialog() == true)
             {
-                File.WriteAllBytes(saveFileDialog.FileName, Ser.GetBytes(elGamal.privateK));
-                privateKeySave = true;
+                if (saveFileDialog.ShowDialog() == true && saveFileDialog.FileName.Length != 0)
+                {
+                
+                    File.WriteAllBytes(saveFileDialog.FileName, Encrypter.EncryptBytes(Ser.GetBytes(elGamal.privateK), Core.utils.Encoder.Encode(pC.passwordF), Core.utils.Encoder.Encode("elgamal-tools")));
+                    privateKeySave = true;
+                }
+
             }
                 
         }
@@ -220,17 +229,34 @@ namespace ElGamalTools
             openFileDialog.Filter = "Private key (*.pk)|*.pk";
             if (openFileDialog.ShowDialog() == true && openFileDialog.FileName.Length != 0)
             {
-                if (elGamal == null)
+                p = new Password();
+
+                if (p.ShowDialog()  == true)
                 {
-                    elGamal = new ElGamal(privateKey: Des.toPrivateKey(File.ReadAllBytes(openFileDialog.FileName)));
+                    PrivateKey privateKey = null;
+                    try
+                    {
+                        privateKey = Des.toPrivateKey(Encrypter.DecryptBytes(File.ReadAllBytes(openFileDialog.FileName), Core.utils.Encoder.Encode(p.passwordF), Core.utils.Encoder.Encode("elgamal-tools")));
+
+                    }catch(Exception err)
+                    {
+                        MessageBox.Show("Введенный пароль оказался неверным.", "Ошибка при открытии приватного ключа");
+                        return;
+                    }
+
+                    if (elGamal == null)
+                    {
+                        elGamal = new ElGamal(privateKey: privateKey);
+                    }
+                    else
+                    {
+                        elGamal = new ElGamal(privateKey: privateKey, publicKey: elGamal.publicK);
+                    }
+
+                    SetKeys();
+                    privateKeySave = true;
                 }
-                else
-                {
-                    elGamal = new ElGamal(privateKey: Des.toPrivateKey(File.ReadAllBytes(openFileDialog.FileName)), publicKey: elGamal.publicK);
-                }
-                
-                SetKeys();
-                privateKeySave = true;
+
             }
                 
         }
