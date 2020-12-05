@@ -18,7 +18,8 @@ using Core.utils;
 using Core.data;
 using System.Numerics;
 using System.ComponentModel;
-
+using Microsoft.Win32;
+using System.IO;
 
 namespace ElGamalTools
 {
@@ -31,12 +32,10 @@ namespace ElGamalTools
         About a;
         List<PairPG> pairPGs;
         PairPG pairPG;
-
+        ElGamal elGamal;
         BackgroundWorker backgroundWorker = new BackgroundWorker();
 
 
-        Thread threadGeneratePairPG;
-        static object locker = new object();
         public MainWindow()
         {
             InitializeComponent();
@@ -116,8 +115,7 @@ namespace ElGamalTools
             
 
         }
-
-
+        
         private void StopGenerate()
         {
             GeneratePairPG.Content = "Сгенерировать пару";
@@ -147,11 +145,84 @@ namespace ElGamalTools
             gValue.Text = Utils.BigIntegerToHexString(pairPG.generator);
         }
 
+        private void SetKeys()
+        {
+            privateKeyValue.Text = Utils.BigIntegerToHexString(elGamal.privateK.x);
+            publicKeyValue.Text = Utils.BigIntegerToHexString(elGamal.publicK.h);
+        }
+
         private PairPG GetPairPG(int length)
         {
             return pairPGs[length / 8 - 8];
         }
 
-        
+        private void GenerateKeys_Click(object sender, RoutedEventArgs e)
+        {
+            elGamal = new ElGamal(pairPG);
+            SetKeys();
+        }
+
+        private string showFileBrowser()
+        {
+            // Create OpenFileDialog 
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                return dialog.SelectedPath;
+            }
+           
+        }
+
+        private void SavePrivateKey_Click(object sender, RoutedEventArgs e)
+        {
+            if (elGamal == null || elGamal.privateK == null)
+            {
+                MessageBox.Show("Приватный ключ не задан.");
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Private key (*.pk)|*.pk";
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllBytes(saveFileDialog.FileName, Ser.GetBytes(elGamal.privateK));
+        }
+
+        private void OpenPrivateKey_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Private key (*.pk)|*.pk";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                elGamal = new ElGamal(privateKey: Des.toPrivateKey(File.ReadAllBytes(openFileDialog.FileName)), publicKey: elGamal.publicK);
+                SetKeys();
+            }
+                
+        }
+
+        private void SavePublicKey_Click(object sender, RoutedEventArgs e)
+        {
+            if (elGamal == null  || elGamal.publicK == null)
+            {
+                MessageBox.Show("Публичный ключ не задан.");
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Public key (*.pubk)|*.pubk";
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllBytes(saveFileDialog.FileName, Ser.GetBytes(elGamal.publicK));
+        }
+
+        private void OpenPublicKey_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Public key (*.pubk)|*.pubk";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                elGamal = new ElGamal(publicKey: Des.toPublicKey(File.ReadAllBytes(openFileDialog.FileName)), privateKey: elGamal.privateK);
+                SetKeys();
+            }
+                
+        }
     }
 }

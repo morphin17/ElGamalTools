@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -70,7 +71,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="PairPGGenerator.cs" />
     <Compile Include="Utils.cs" />
     <Page Include="About.xaml">
       <SubType>Designer</SubType>

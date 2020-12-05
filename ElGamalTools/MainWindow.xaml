@@ -120,7 +120,7 @@
                                         Размер ключей:
                                     </TextBlock>
                                     <xctk:IntegerUpDown Name="keySize" ValueChanged="keySize_ValueChanged" Width="80" Margin="0,0,10,0" Value="64" AllowTextInput="False"  Increment="8" DefaultValue="64" Minimum="64" Maximum="256" />
-                                    <Button Margin="0,0,10,0" Name="GenerateKeys" Click="GeneratePairPG_Click" Width="150" ToolTip="Создать случайный приватный и публичный ключи.">
+                                    <Button Click="GenerateKeys_Click" Margin="0,0,10,0" Name="GenerateKeys" Width="150" ToolTip="Создать случайный приватный и публичный ключи.">
                                         Сгенерировать
                                     </Button>
                                     
@@ -133,10 +133,10 @@
                                                     Private Key:
                                                 </TextBlock>
 
-                                                <Button DockPanel.Dock="Right"  Width="80" Margin="10,0,0,0">
+                                                <Button Name="SavePrivateKey" Click="SavePrivateKey_Click" DockPanel.Dock="Right"  Width="80" Margin="10,0,0,0">
                                                     Сохранить
                                                 </Button>
-                                                <Button DockPanel.Dock="Right" Width="50" Margin="10,0,0,0">
+                                                <Button Name="OpenPrivateKey" Click="OpenPrivateKey_Click" DockPanel.Dock="Right" Width="50" Margin="10,0,0,0">
                                                     ...
                                                 </Button>
 
@@ -154,10 +154,10 @@
                                                     Public Key:
                                                 </TextBlock>
                                                 
-                                                <Button DockPanel.Dock="Right"  Width="80" Margin="10,0,0,0">
+                                                <Button Name="SavePublicKey" Click="SavePublicKey_Click" DockPanel.Dock="Right"  Width="80" Margin="10,0,0,0">
                                                     Сохранить
                                                 </Button>
-                                                <Button DockPanel.Dock="Right" Width="50" Margin="10,0,0,0">
+                                                <Button Name="OpenPublicKey" Click="OpenPublicKey_Click" DockPanel.Dock="Right" Width="50" Margin="10,0,0,0">
                                                     ...
                                                 </Button>
 
