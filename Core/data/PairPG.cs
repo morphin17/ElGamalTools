@@ -7,6 +7,8 @@ using System.Numerics;
 
 namespace Core.data
 {
+
+
     [Serializable]
     public class PairPG 
     {
@@ -14,19 +16,18 @@ namespace Core.data
         private BigInteger p;
         private BigInteger g;
 
+        
+        //private Func<BigInteger, int> onNewCandidate;
+        
+        //private Func<BigInteger, int> onNewPrime;
         [field: NonSerialized]
-        private Func<BigInteger, int> onNewCandidate;
-        [field: NonSerialized]
-        private Func<BigInteger, int> onNewPrime;
-
+        private System.ComponentModel.BackgroundWorker worker;
         public PairPG(
             int length = 8,
-            Func<BigInteger, int> onNewPrime = null,
-            Func<BigInteger, int> onNewCandidate = null) : base()
+            System.ComponentModel.BackgroundWorker worker = null
+            ) : base()
         {
-            this.onNewCandidate = onNewCandidate;
-            this.onNewPrime = onNewPrime;
-
+            this.worker = worker;
 
             GeneratePrime(length);
             FindPrimitiveRoot();
@@ -57,12 +58,19 @@ namespace Core.data
                 while (!IsPrime(p, 128))
                 {
                     p = GeneratePrimeCandidate(length);
-
+                    if (worker != null)
+                    {
+                        if (worker.CancellationPending)
+                        {
+                            return;
+                        }
+                    }
                 }
 
-                if (onNewPrime != null)
+
+                if (worker != null)
                 {
-                    onNewPrime(p);
+                    worker.ReportProgress(0, p);
                 }
 
                 if (IsPrime((p - 1) / 2, 128))
@@ -80,11 +88,19 @@ namespace Core.data
 
             while (true)
             {
+                if (worker != null)
+                {
+                    if (worker.CancellationPending)
+                    {
+                        return;
+                    }
+                }
+
                 BigInteger g = utils.BigIntegerRandom.nextRandom(2, p - 1);
 
-                if (onNewCandidate != null)
+                if (worker != null)
                 {
-                    onNewCandidate(g);
+                    worker.ReportProgress(1, g);
                 }
 
                 if ((BigInteger.ModPow(g, (p - 1) / p1, p) != 1) &&

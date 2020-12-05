@@ -6,7 +6,9 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:ElGamalTools"
         mc:Ignorable="d"
-        Title="ElGamal Tools" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
+        Title="ElGamal Tools" Height="450" Width="1100" MinHeight="450" MinWidth="1100" Initialized="Window_Initialized" 
+        
+        >
     <Grid>
         <DockPanel VerticalAlignment="Stretch" LastChildFill="True" >
             <Menu Height="20" VerticalAlignment="Top" DockPanel.Dock="Top">
@@ -36,7 +38,7 @@
                             <DockPanel LastChildFill="False">
                                 <DockPanel DockPanel.Dock="Top" LastChildFill="False" HorizontalAlignment="Right">
                                     <Button Name="GeneratePairPG" Click="GeneratePairPG_Click" Width="150" ToolTip="Пересчитать P и G. Это может занять некоторое время.">
-                                        Пересчитать пару
+                                        Сгенерировать пару
                                     </Button>
                                 </DockPanel>
                                 <GroupBox DockPanel.Dock="Top" Header="Пара (P,G)">
@@ -77,11 +79,11 @@
 
                                 </GroupBox>
                                 <DockPanel  DockPanel.Dock="Bottom">
-                                    <ProgressBar Visibility="Hidden" Name="GenerateLoading" IsIndeterminate="False" Value="0">
+                                    <ProgressBar Name="GenerateLoading" IsIndeterminate="False" Value="0">
 
                                     </ProgressBar>
                                 </DockPanel>
-                                <DockPanel Visibility="Hidden" Name="GenerateLog" DockPanel.Dock="Bottom" Margin="0,10,0,10">
+                                <DockPanel Name="GenerateLog" DockPanel.Dock="Bottom" Margin="0,10,0,10">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition></ColumnDefinition>
@@ -89,20 +91,20 @@
                                         </Grid.ColumnDefinitions>
 
                                         <DockPanel Grid.Column="0">
-                                            <TextBlock Margin="0,0,10,0" FontWeight="Bold" Visibility="Visible" >
+                                            <TextBlock Margin="0,0,10,0" FontWeight="Bold" >
                                                 Поиск P:
                                             </TextBlock>
                                             <TextBlock Name="pCandidate">
-                                                174876E813A5855584F4585455F854855A55965566691E66
+                                                
                                             </TextBlock>
                                         </DockPanel>
 
                                         <DockPanel Grid.Column="1">
-                                            <TextBlock Margin="0,0,10,0" FontWeight="Bold" Visibility="Visible" >
+                                            <TextBlock Margin="0,0,10,0" FontWeight="Bold" >
                                                 Поиск G:
                                             </TextBlock>
                                             <TextBlock Name="gCandidate">
-                                                174876E813A5855584F4585455F854855A55965566691E66
+                                                
                                             </TextBlock>
                                         </DockPanel>
                                     </Grid>
